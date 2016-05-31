@@ -7,7 +7,7 @@ AppTroy is a generic and fine-grained system for malware analysis, which is conv
 --------
 AppTroy is compatible with different versions and even ROMS, but you have to modify one thing in the source code to make it work on your Android system. It's recommended that the target Android system should be <= 4.4.2 because yet I haven't tested it with ART runtime environment. 
 
-You need to adapt an `offset` in /jni/dump.cpp file at line 13(`#define OFFSET 796;`). The value is the offset from gDvm to its member variable useDexFiles, which can be accessed through reverse engineering(Note: the `dvmInternalNativeShutdownv()` method may be the one you should inspect.). Of course, all these manual work can be done in script. The source code is in example/ directory but I find it hard to use :(
+You need to adapt the `offset` in /jni/dump.cpp file at line 13(`#define OFFSET 796;`). The value is the offset from gDvm to its member variable useDexFiles, which can be accessed through reverse engineering(Note: the `dvmInternalNativeShutdownv()` method may be the one you should inspect.). Of course, all these manual work can be done in script. The source code is in example/ directory but I find it hard to use :(
 
 ## Install
 ----------
@@ -24,6 +24,8 @@ Make sure you have read everything above.
 
 	adb push /libs/armeabi/libapptroy.so /system/libs/
 	adb push /libs/armeabi/libluajava.so /system/libs/
+
+	remember enable the AppTroy module in Xposed installer application and reboot the system
 ```
 [Xposed Framework](http://www.repo.xposed.info/module/de.robv.android.xposed.installer)
 
@@ -56,12 +58,16 @@ update.json template
 }
 ```
 Alternative command:
+
 `am broadcast -a com.cc.dumpapk --es package your/package/name --es cmd '{"action":"update_cls", "clsName":"class type descriptor"}`
+
 `am broadcast -a com.cc.dumpapk --es package your/package/name --es cmd '{"action":"update_mth", "clsName":"type descriptor", "mthName":"method name", "signature":"method signature"}'`
 
 ### Lua script (See [AndroLua](https://github.com/mkottman/AndroLua))
 `am broadcast -a com.cc.dumpapk --es package your/package/name --es cmd '{"action":"invoke", "filepath":"/path/to/the/lua/script"}'`
+
 OR
+
 `am broadcast -a com.cc.dumpapk --es package your/package/name --es cmd '{"action":"update", "lua":"content of lua script"}'`
 
 Five convenient functions:
@@ -77,3 +83,5 @@ Five convenient functions:
 + *log(string)*: The function receives a string and records it in the log.
 
 ## Samples
+## Question
+If you have any trouble, you can contact me via email(weitengchencc@gmail.com).
