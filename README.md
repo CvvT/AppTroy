@@ -1,16 +1,16 @@
 # AppTroy
-=============
+=========
 An Online Analysis System for Packed Android Malware.
 AppTroy is a generic and fine-grained system for malware analysis, which is convenient for analysts to unpack, deobfuscate and monitor system API. With the functionalities it provides, even an inexperienced analyst is able to better understand the internal logic of the code, because our system does not require knowledge of the packer.
 
 ## Build
----------------
+--------
 AppTroy is compatible with different versions and even ROMS, but you have to modify one thing in the source code to make it work on your Android system. It's recommended that the target Android system should be <= 4.4.2 because yet I haven't tested it with ART runtime environment. 
 
-You need to adapt an `offset` in /jni/dump.cpp file at line 13(`#define OFFSET 796;`). The value is the offset from gDvm to its member variable useDexFiles, which can be accessed through reverse engineering(Note: the dvmInternalNativeShutdownv() method may be the one you should inspect.). Of course, all these manual work can be done in script. The source code is in example/ directory but I find it hard to use :(
+You need to adapt an `offset` in /jni/dump.cpp file at line 13(`#define OFFSET 796;`). The value is the offset from gDvm to its member variable useDexFiles, which can be accessed through reverse engineering(Note: the `dvmInternalNativeShutdownv()` method may be the one you should inspect.). Of course, all these manual work can be done in script. The source code is in example/ directory but I find it hard to use :(
 
 ## Install
----------------
+----------
 Make sure you have read everything above.
 
 ```
@@ -25,9 +25,10 @@ Make sure you have read everything above.
 	adb push /libs/armeabi/libapptroy.so /system/libs/
 	adb push /libs/armeabi/libluajava.so /system/libs/
 ```
+[Xposed Framework](http://www.repo.xposed.info/module/de.robv.android.xposed.installer)
 
 ## Usage
------------------
+--------
 Simply using Log.d() to output all information(`adb logcat -s cc` to see).
 If you want to change the log behavior, the source code is in file /com/cc/apptroy/util/Logger.java
 
@@ -64,14 +65,15 @@ OR
 `am broadcast -a com.cc.dumpapk --es package your/package/name --es cmd '{"action":"update", "lua":"content of lua script"}'`
 
 Five convenient functions:
-luajava.newInstance(className, ...): This function creates a new Java object, and returns a Lua object that is a reference to the actual Java object. You can access this object with the regular syntax used to access object oriented functions in Lua objects. The first parameter is the name of the class to be instantiated. The other parameters are passed to the Java Class constructor.
 
-bind(className): This function retrieves a Java class corresponding to className. The returned object can be used to access static fields and methods of the corresponding class.
++ *luajava.newInstance(className, ...)*: This function creates a new Java object, and returns a Lua object that is a reference to the actual Java object. You can access this object with the regular syntax used to access object oriented functions in Lua objects. The first parameter is the name of the class to be instantiated. The other parameters are passed to the Java Class constructor.
 
-luajava.new(javaClass): This function receives a java.lang.Class and returns a new instance of this class. {\itshape New} works just like newInstance, but the first argument is an instance of the class.
++ *bind(className)*: This function retrieves a Java class corresponding to className. The returned object can be used to access static fields and methods of the corresponding class.
 
-luajava.createProxy(interfaceNames, luaObject): We can also, instead of creating a Java object to be manipulated by Lua, create a Lua object that will be manipulated by Java. We can do that in LuaJava by creating a proxy to that object. This is done by the {\itshape createProxy} function. The function returns a java Object reference that can be used as an implementation of the given interface. CreateProxy receives a string that contain the names of the interfaces to be implemented, separated by a comma(,), and a lua object that is the interface implementation.
++ *luajava.new(javaClass)*: This function receives a java.lang.Class and returns a new instance of this class. {\itshape New} works just like newInstance, but the first argument is an instance of the class.
 
-log(string): The function receives a string and records it in the log.
++ *luajava.createProxy(interfaceNames, luaObject)*: We can also, instead of creating a Java object to be manipulated by Lua, create a Lua object that will be manipulated by Java. We can do that in LuaJava by creating a proxy to that object. This is done by the {\itshape createProxy} function. The function returns a java Object reference that can be used as an implementation of the given interface. CreateProxy receives a string that contain the names of the interfaces to be implemented, separated by a comma(,), and a lua object that is the interface implementation.
+
++ *log(string)*: The function receives a string and records it in the log.
 
 ## Samples
