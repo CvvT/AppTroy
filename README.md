@@ -17,7 +17,7 @@ Make sure you have read everything above.
 	git clone https://github.com/CvvT/AppTroy.git
 	cd AppTroy
 	ndk-build
-	./gradlew build
+	import this project into Android Studio and build it
 
 	install Xposed framework
 	install AppTroy
@@ -39,13 +39,18 @@ Monitor most of sensitive API.
 ### Unpacking
 1. start the target application
 2. show DexFiles
+
 	`am broadcast -a com.cc.dumpapk --es package your/package/name --es cmd '{"action":"show"}'`
 3. select one DexFile: Check the output
 4. Dump DexFile
-	`am broadcast -a com.cc.dumpapk --es package your/package/name --es cmd '{"action":"dump", "cookie":"the_value_selected_from_previous_step"}'`
+
+	`am broadcast -a com.cc.dumpapk --es package your/package/name --es cmd '{"action":"dump", "cookie": the_value_selected_from_previous_step}'`
+
 	When it's done, all smali files will be stored in /data/data/package/of/target/app/files/smali/
 5. Update Class/Method: when you failed to get the real content of one class or method
+
 	`am broadcast -a com.cc.dumpapk --es package your/package/name --es cmd '{"action":"update", "filepath":"/path/to/the/config/file"}'`
+
 	Here is a sample of config file.
 
 ```
