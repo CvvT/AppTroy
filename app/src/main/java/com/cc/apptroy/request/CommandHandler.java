@@ -22,6 +22,7 @@ public abstract class CommandHandler {
     final static String ACTION_DUMP_MEM = "dump_mem";
     final static String ACTION_DUMP_HEAP = "dump_heap";
     final static String ACTION_HOOK_UPDATE_METHOD = "update_hook";
+    final static String ACTION_GET_RESOURCE = "resource";
 
     //Key
     final static String COOKIE = "cookie";
@@ -32,6 +33,8 @@ public abstract class CommandHandler {
     final static String CLASS_NAME = "clsName";
     final static String METHOD_NAME = "mthName";
     final static String SIGNATURE = "signature";
+    final static String RESOURCE_ID = "id";
+    final static String RESOURCE_TYPE = "type";
 
     public abstract void doAction();
 
@@ -113,6 +116,16 @@ public abstract class CommandHandler {
                     String mthName = jsoncmd.getString(METHOD_NAME);
                     String signature = jsoncmd.getString(SIGNATURE);
                     handler = new HookMethodUpdate(clsName, mthName, signature);
+                }
+            } else if (ACTION_GET_RESOURCE.equals(action)) {
+                if (jsoncmd.containsKey(RESOURCE_TYPE) && jsoncmd.containsKey(RESOURCE_ID)) {
+                    String type = jsoncmd.getString(RESOURCE_TYPE);
+                    int id = jsoncmd.getIntValue(RESOURCE_ID);
+                    if (jsoncmd.containsKey(FILE_PATH)) {
+                        handler = new ResourceDump(id, type, jsoncmd.getString(FILE_PATH));
+                    } else {
+                        handler = new ResourceDump(id, type);
+                    }
                 }
             }
         } catch (JSONException e) {

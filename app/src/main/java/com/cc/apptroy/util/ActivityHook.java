@@ -14,9 +14,16 @@ import de.robv.android.xposed.XC_MethodHook;
  * Created by CwT on 15/12/6.
  */
 public class ActivityHook extends XC_MethodHook {
+    private final boolean NEED_DEBUG = false;
+    private final String LOG_TAG = this.getClass().getName();
+
     @Override
     protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
         Log.d("cc", "before, register receiver");
+        if (NEED_DEBUG) {
+            Activity activity = (Activity) param.thisObject;
+            Log.d(LOG_TAG, activity.toString());
+        }
         if (!ModuleContext.HAS_REGISTER_LISENER) {
             Activity app = (Activity) param.thisObject;
             IntentFilter filter = new IntentFilter(CommandBroadcastReceiver.INTENT_ACTION);

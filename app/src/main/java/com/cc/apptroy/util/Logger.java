@@ -29,8 +29,12 @@ public class Logger {
 			Log.d(LOGTAG_WORKFLOW + PID, message);
 	}
 
-	public static void log_file(String message){
-        File file = new File(ModuleContext.getInstance().getAppContext().getFilesDir().getPath()+File.separator+"logger.txt");
+    public static void log_file(String message) {
+        log_file(message, "logger.log");
+    }
+
+	public static void log_file(String message, String filename){
+        File file = new File(ModuleContext.getInstance().getAppContext().getFilesDir().getPath()+File.separator+filename);
         if (!file.exists()){
             try {
                 if (!file.createNewFile())

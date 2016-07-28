@@ -35,7 +35,7 @@ public class ModuleContext {
     public static boolean HAS_REGISTER_LISENER = false;
     private Application firstApplication;
     private static ModuleContext moduleContext;
-    private boolean TEST_HOOK = true;
+    private final boolean TEST_HOOK = true;
 
     private static HashMap<String, DexFileInfo> dynLoadedDexInfo = new HashMap<String, DexFileInfo>();
 
